@@ -53,14 +53,12 @@ const Portainer = require('./portainer')
             repositoryUsername || repositoryPassword
         )
         console.log('repositoryAuthentication:', repositoryAuthentication)
-        let file_system_path = core.getInput('file_system_path')
-        console.log('relativePath:', file_system_path)
-        let supportRelativePath = false
-        let fileSystemPath = ''
+        let fs_path = core.getInput('fs_path')
+        console.log('fs_path:', fs_path)
 
         const portainer = new Portainer(url, token)
 
-        if (file_system_path) {
+        if (fs_path) {
             // get system info and check if portainer is BE edition
             const version = await portainer.getVersion()
             const is_portainer_be = version.ServerEdition == 'EE'
@@ -69,8 +67,6 @@ const Portainer = require('./portainer')
                     'Relative path is only supported on Portainer Business Edition'
                 )
             }
-            supportRelativePath = true
-            fileSystemPath = file_system_path
         }
 
         if (!endpointID) {
@@ -132,8 +128,11 @@ const Portainer = require('./portainer')
                     repositoryAuthentication,
                     repositoryPassword,
                     repositoryUsername,
-                    supportRelativePath,
-                    fileSystemPath
+                    // If fs_path is set, add it to the body
+                    ...(fs_path && { 
+                        supportRelativePath: true,
+                        fileSystemPath: fs_path 
+                    }),
                 }
                 // console.log('body:', body)
                 stack = await portainer.createStackRepo(endpointID, body)

@@ -62,8 +62,8 @@ inputs:
     description: "Repository Password"
     required: false
     default: ""
-  file_system_path:
-    description: "Host path used for relative path volume (only available in Portainer BE)"
+  fs_path:
+    description: "Relative path volume in host (only available in Portainer BE)"
     required: false
 
 outputs:
