@@ -48,6 +48,7 @@ This action is written from the ground up in VanillaJS and is not a fork/clone o
 | env_file   | No       | -                     | Dotenv File Path \*     |
 | username   | No       | -                     | Repository Username \*  |
 | password   | No       | -                     | Repository Password \*  |
+| fs_path    | No       | -                     | Relative Path (BE) \*  |
 
 **token** - To create a Portainer API token see: https://docs.portainer.io/api/access
 
@@ -67,6 +68,9 @@ JSON should be an object. Example: `{"KEY": "Value"}`
 
 **username/password** - Only set these if the `repo` is private and requires authentication.
 This is NOT the Portainer username/password, see `token` for Portainer authentication.
+
+**file_system_path** - Only available in Portainer Business Edition. When specified, enables relative path volumes support 
+and uses the provided path as the base directory for relative volume mappings in your compose file.
 
 ```yaml
 - name: 'Portainer Deploy'
@@ -147,6 +151,19 @@ Specify environment variables, may use json, or file, or a combination of both:
       type: file
       env_json: '{"KEY": "Value"}'
       env_file: .env
+```
+
+Deploy with relative path volumes (BE only):
+
+```yaml
+- name: 'Portainer Deploy'
+  uses: cssnr/portainer-stack-deploy-action@v1
+  with:
+      token: ${{ secrets.PORTAINER_TOKEN }}
+      url: https://portainer.example.com:9443
+      name: stack-name
+      file: docker-compose.yaml
+      fs_path: /mnt
 ```
 
 To include this in a general workflow but only run on release events use an if:

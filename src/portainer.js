@@ -17,6 +17,11 @@ class Portainer {
         })
     }
 
+    async getVersion() {
+        const response = await this.client.get('/status/version')
+        return response.data
+    }
+
     async getEndpoints() {
         const response = await this.client.get('/endpoints')
         return response.data
