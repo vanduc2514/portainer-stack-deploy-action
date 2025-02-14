@@ -62,6 +62,9 @@ inputs:
     description: "Repository Password"
     required: false
     default: ""
+  file_system_path:
+    description: "Host path used for relative path volume (only available in Portainer BE)"
+    required: false
 
 outputs:
   stackID:
