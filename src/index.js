@@ -134,7 +134,7 @@ const Portainer = require('./portainer')
                         fileSystemPath: fs_path 
                     }),
                 }
-                // console.log('body:', body)
+                console.log('body:', body)
                 stack = await portainer.createStackRepo(endpointID, body)
                 // console.log('stack:', stack)
                 core.info(`Deployed Stack: ${stack.Id}: ${stack.Name}`)
