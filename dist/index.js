@@ -33839,6 +33839,11 @@ class Portainer {
         })
     }
 
+    async getVersion() {
+        const response = await this.client.get('/status/version')
+        return response.data
+    }
+
     async getEndpoints() {
         const response = await this.client.get('/endpoints')
         return response.data
@@ -40672,8 +40677,21 @@ const Portainer = __nccwpck_require__(1055)
             repositoryUsername || repositoryPassword
         )
         console.log('repositoryAuthentication:', repositoryAuthentication)
+        let fs_path = core.getInput('fs_path')
+        console.log('fs_path:', fs_path)
 
         const portainer = new Portainer(url, token)
+
+        if (fs_path) {
+            // get system info and check if portainer is BE edition
+            const version = await portainer.getVersion()
+            const is_portainer_be = version.ServerEdition == 'EE'
+            if (!is_portainer_be) {
+                return core.setFailed(
+                    'Relative path is only supported on Portainer Business Edition'
+                )
+            }
+        }
 
         if (!endpointID) {
             const endpoints = await portainer.getEndpoints()
@@ -40734,8 +40752,13 @@ const Portainer = __nccwpck_require__(1055)
                     repositoryAuthentication,
                     repositoryPassword,
                     repositoryUsername,
+                    // If fs_path is set, add it to the body
+                    ...(fs_path && { 
+                        supportRelativePath: true,
+                        fileSystemPath: fs_path
+                    }),
                 }
-                // console.log('body:', body)
+                console.log('body:', body)
                 stack = await portainer.createStackRepo(endpointID, body)
                 // console.log('stack:', stack)
                 core.info(`Deployed Stack: ${stack.Id}: ${stack.Name}`)
