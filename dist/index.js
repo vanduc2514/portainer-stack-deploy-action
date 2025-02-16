@@ -40755,10 +40755,10 @@ const Portainer = __nccwpck_require__(1055)
                     // If fs_path is set, add it to the body
                     ...(fs_path && { 
                         supportRelativePath: true,
-                        fileSystemPath: fs_path
+                        fileSystemPath: fs_path 
                     }),
                 }
-                console.log('body:', body)
+                // console.log('body:', body)
                 stack = await portainer.createStackRepo(endpointID, body)
                 // console.log('stack:', stack)
                 core.info(`Deployed Stack: ${stack.Id}: ${stack.Name}`)
