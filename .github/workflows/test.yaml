@@ -39,17 +39,17 @@ jobs:
           echo 'swarmID: ${{ steps.test.outputs.swarmID }}'
           echo 'endpointID: ${{ steps.test.outputs.endpointID }}'
 
-      #- name: "Call API"
-      #  uses: indiesdev/curl@v1.1
-      #  with:
-      #    url: "${{ secrets.PORTAINER_URL }}/api/stacks/${{ steps.test.outputs.stackID }}"
-      #    method: "DELETE"
-      #    accept: 204
-      #    headers: '{ "X-API-Key": "${{ secrets.PORTAINER_TOKEN }}" }'
-      #    params: '{ "endpointId": "${{ steps.test.outputs.endpointID }}" }'
-      #    timeout: 5000
-      #    log-response: true
-      #    retries: 1
+      - name: "Clean up"
+        uses: indiesdev/curl@v1.1
+        with:
+          url: "${{ secrets.PORTAINER_URL }}/api/stacks/${{ steps.test.outputs.stackID }}"
+          method: "DELETE"
+          accept: 204
+          headers: '{ "X-API-Key": "${{ secrets.PORTAINER_TOKEN }}" }'
+          params: '{ "endpointId": "${{ steps.test.outputs.endpointID }}" }'
+          timeout: 5000
+          log-response: true
+          retries: 1
 
   lint:
     name: "Lint"
@@ -89,6 +89,7 @@ jobs:
           npm install
           npm run build
 
+      # Remove this
       - name: "Verify"
         run: |
           git status --porcelain dist/
