@@ -40685,7 +40685,7 @@ const Portainer = __nccwpck_require__(1055)
         if (fs_path) {
             // get system info and check if portainer is BE edition
             const version = await portainer.getVersion()
-            const is_portainer_be = version.ServerEdition == 'EE'
+            const is_portainer_be = version.ServerEdition === 'EE'
             if (!is_portainer_be) {
                 return core.setFailed(
                     'Relative path is only supported on Portainer Business Edition'
